@@ -23,9 +23,11 @@ body {
 
 </style>
 <body>
+<h1>Understanding Our Taxes</h1>
 <script src="/js/d3.v3.js"></script>
 <script>
 
+function chart(filename, container) {
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
@@ -49,13 +51,13 @@ var yAxis = d3.svg.axis()
     .orient("left")
     .tickFormat(function(d) { return formatValue(d).replace('G', 'B'); });
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select(container).append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("data.csv", function(error, data) {
+d3.csv(filename, function(error, data) {
   color.domain(d3.keys(data[0]).filter(function(key) { return key !== "Year"; }));
 
   data.forEach(function(d) {
@@ -116,5 +118,12 @@ d3.csv("data.csv", function(error, data) {
       .text(function(d) { return d; });
 
 });
-
+}
 </script>
+<h2>Tax Receipts</h2>
+<div id="data"/>
+<script>chart('data.csv', '#data');</script>
+<h2>Inflation Adjusted Tax Receipts - in today's money</h2>
+<div id="infl"/>
+<script>chart('infl.csv', '#infl');</script>
+</body>
